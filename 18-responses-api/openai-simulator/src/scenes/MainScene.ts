@@ -128,6 +128,7 @@ const range = (start: number, end: number) =>
 const TILE_SIZE = 48;
 const EDITOR_SELECTION_PADDING = 10;
 const EDITABLE_LAYOUT_STORAGE_KEY = 'openai-simulator:editable-layout-v1';
+const EDIT_MODE_PASSWORD = 'jackie';
 const PLAY_CAMERA_ZOOM = 1.05;
 const MIN_EDIT_MODE_ZOOM = 0.45;
 const MAX_EDIT_MODE_ZOOM = 1.5;
@@ -1054,7 +1055,7 @@ export class MainScene extends Phaser.Scene {
         ) {
             if (this.isEditMode) {
                 this.exitEditMode();
-            } else {
+            } else if (this.requestEditModePassword()) {
                 this.enterEditMode();
             }
             return;
@@ -1090,8 +1091,6 @@ export class MainScene extends Phaser.Scene {
         const bossDistance = nearestBossTarget?.distance ?? null;
         const nearBoss =
             this.bossAlive && bossDistance !== null && bossDistance <= DEMON_PLAYER_ATTACK_RANGE + 16;
-        const nearBossPotion = this.isBossPotionNearby(playerSprite.x, playerSprite.y);
-        const nearBossHpPotion = this.isBossHpPotionNearby(playerSprite.x, playerSprite.y);
         const isColonPlayer = this.selectedCharacterId === 'colon';
         const nearFridgeLeftovers =
             isColonPlayer &&
@@ -1204,11 +1203,6 @@ export class MainScene extends Phaser.Scene {
                 .setVisible(true)
                 .setPosition(BOOKS_POSITION.x, BOOKS_POSITION.y - 52)
                 .setText('Press SPACE to read');
-        } else if (nearBossHpPotion && !this.isInteracting && !this.isWaitingForResponse) {
-            this.interactionPrompt
-                .setVisible(true)
-                .setPosition(this.bossHpPotion.x, this.bossHpPotion.y - 38)
-                .setText('Press SPACE to drink HP potion');
         } else if (nearFridgeLeftovers && !this.isInteracting && !this.isWaitingForResponse) {
             this.interactionPrompt
                 .setVisible(true)
@@ -1219,11 +1213,6 @@ export class MainScene extends Phaser.Scene {
                 .setVisible(true)
                 .setPosition(playerSprite.x, playerSprite.y - 72)
                 .setText('Press SPACE to call the Good Witch for help');
-        } else if (nearBossPotion && !this.isInteracting && !this.isWaitingForResponse) {
-            this.interactionPrompt
-                .setVisible(true)
-                .setPosition(this.bossMagicPotion.x, this.bossMagicPotion.y - 38)
-                .setText('Press SPACE to drink potion');
         } else if (
             nearBoss &&
             nearestBossTarget &&
@@ -1249,11 +1238,6 @@ export class MainScene extends Phaser.Scene {
             this.interactionPrompt.setVisible(false);
         }
 
-        if (didPressInteract && nearBossHpPotion && !this.isInteracting && !this.isWaitingForResponse) {
-            this.consumeBossHpPotion();
-            return;
-        }
-
         if (didPressInteract && nearFridgeLeftovers && !this.isInteracting && !this.isWaitingForResponse) {
             this.pizzaHelpUsed = true;
             this.grantPizzaProjectiles();
@@ -1270,11 +1254,6 @@ export class MainScene extends Phaser.Scene {
             this.witchHelpUsed = true;
             this.showTemporaryCenterMessage('Calling the Good Witch!', 1600);
             this.scheduleGoodWitchArrival();
-            return;
-        }
-
-        if (didPressInteract && nearBossPotion && !this.isInteracting && !this.isWaitingForResponse) {
-            this.consumeBossPotion();
             return;
         }
 
@@ -4409,6 +4388,22 @@ export class MainScene extends Phaser.Scene {
         this.witchSupportSprite = null;
     }
 
+    private requestEditModePassword(): boolean {
+        const enteredPassword = window.prompt('Enter edit mode password');
+
+        if (enteredPassword === null) {
+            this.showTemporaryCenterMessage('Edit mode locked', 1400);
+            return false;
+        }
+
+        if (enteredPassword.trim().toLowerCase() !== EDIT_MODE_PASSWORD) {
+            this.showTemporaryCenterMessage('Wrong edit password', 1600);
+            return false;
+        }
+
+        return true;
+    }
+
     private summonWitchSupportVolley(): void {
         if (!this.bossAlive || this.activeBossType !== 'flying-demons') {
             return;
@@ -4433,14 +4428,14 @@ export class MainScene extends Phaser.Scene {
             this.showTemporaryCenterMessage('The Good Witch has Arrived!', 2200);
 
             for (let i = 0; i < WITCH_HELP_PROJECTILE_COUNT; i += 1) {
-                const timer = this.time.delayedCall((i + 1) * WITCH_HELP_PROJECTILE_INTERVAL_MS, () => {
+                const timer = this.time.delayedCall(i * WITCH_HELP_PROJECTILE_INTERVAL_MS, () => {
                     this.fireWitchSupportProjectile();
                 });
                 this.witchVolleyTimers.push(timer);
             }
 
             const cleanupTimer = this.time.delayedCall(
-                WITCH_HELP_PROJECTILE_COUNT * WITCH_HELP_PROJECTILE_INTERVAL_MS + 1200,
+                (WITCH_HELP_PROJECTILE_COUNT - 1) * WITCH_HELP_PROJECTILE_INTERVAL_MS + 1200,
                 () => {
                     this.clearWitchSupport();
                 },
@@ -5782,7 +5777,7 @@ export class MainScene extends Phaser.Scene {
             this.witchHelpUsed = true;
             this.playNpcPhoneCallAnimation(this.activeNpc);
             this.scheduleGoodWitchArrival();
-            this.handleNpcResponse("Hang on. I'm calling my friend the witch.");
+            this.handleNpcResponse("Hang on. I'm calling my friend The Good Witch.");
             return true;
         }
 
