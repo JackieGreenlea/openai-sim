@@ -3991,8 +3991,8 @@ export class MainScene extends Phaser.Scene {
             this.bossAttackCooldownUntil = 0;
             this.bossInvulnerableUntil = 0;
             this.playerInvulnerableUntil = this.time.now + 600;
-            this.spawnBossPotion();
-            this.spawnBossHpPotion();
+            this.hideBossPotion();
+            this.hideBossHpPotion();
             this.refreshBossStatusText();
             this.showTemporaryCenterMessage('Fire demons have spawned!');
             return;
@@ -4029,8 +4029,8 @@ export class MainScene extends Phaser.Scene {
         this.bossAttackCooldownUntil = this.time.now + 800;
         this.bossInvulnerableUntil = 0;
         this.playerInvulnerableUntil = this.time.now + 600;
-        this.spawnBossPotion();
-        this.spawnBossHpPotion();
+        this.hideBossPotion();
+        this.hideBossHpPotion();
         this.playBossAnimation('idle');
         this.refreshBossStatusText();
         if (bossType === 'demon') {
