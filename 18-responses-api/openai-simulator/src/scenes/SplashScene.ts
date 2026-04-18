@@ -51,6 +51,8 @@ export class SplashScene extends Phaser.Scene {
     private passwordOverlayElement: HTMLDivElement | null = null;
     private passwordInputElement: HTMLInputElement | null = null;
     private passwordSubmitButton: HTMLButtonElement | null = null;
+    private passwordCancelButton: HTMLButtonElement | null = null;
+    private isPasswordPromptOpen = false;
 
     constructor() {
         super({ key: 'SplashScene' });
@@ -75,15 +77,6 @@ export class SplashScene extends Phaser.Scene {
             })
             .setOrigin(0.5);
 
-        this.add
-            .text(width / 2, 146, 'Select and enter password.', {
-                fontFamily: '"Abaddon Light", sans-serif',
-                fontSize: '24px',
-                color: '#e7d6f4',
-                align: 'center',
-            })
-            .setOrigin(0.5);
-
         const startX = width / 2 - 280;
         const cardSpacing = 280;
 
@@ -103,6 +96,7 @@ export class SplashScene extends Phaser.Scene {
                 .on('pointerdown', () => {
                     this.selectedIndex = index;
                     this.refreshSelection();
+                    this.openPasswordPrompt();
                 });
 
             this.add
@@ -137,18 +131,16 @@ export class SplashScene extends Phaser.Scene {
         });
 
         this.passwordText = this.add
-            .text(width / 2, height - 172, '', {
+            .text(width / 2, height - 120, '', {
                 fontFamily: 'monospace',
-                fontSize: '24px',
-                color: '#fff5e7',
-                backgroundColor: 'rgba(32, 18, 44, 0.84)',
-                padding: { left: 12, right: 12, top: 8, bottom: 8 },
+                fontSize: '20px',
+                color: '#efe3ff',
                 align: 'center',
             })
             .setOrigin(0.5);
 
         this.statusText = this.add
-            .text(width / 2, height - 120, '', {
+            .text(width / 2, height - 90, '', {
                 fontFamily: 'monospace',
                 fontSize: '20px',
                 color: '#ffdba8',
@@ -161,7 +153,7 @@ export class SplashScene extends Phaser.Scene {
             .text(
                 width / 2,
                 height - 66,
-                'Arrow keys or 1-2-3 to choose. Type password, ENTER to unlock, BACKSPACE to delete.',
+                'Arrow keys or 1-2-3.',
                 {
                     fontFamily: 'monospace',
                     fontSize: '17px',
@@ -217,6 +209,11 @@ export class SplashScene extends Phaser.Scene {
         if (numberSelection >= 0) {
             this.selectedIndex = numberSelection;
             this.refreshSelection();
+            this.openPasswordPrompt();
+        }
+
+        if (!this.isPasswordPromptOpen) {
+            return;
         }
 
         if (Phaser.Input.Keyboard.JustDown(this.backspaceKey)) {
@@ -232,6 +229,10 @@ export class SplashScene extends Phaser.Scene {
     }
 
     private handleTyping(event: KeyboardEvent): void {
+        if (!this.isPasswordPromptOpen) {
+            return;
+        }
+
         if (this.passwordInputElement && document.activeElement === this.passwordInputElement) {
             return;
         }
@@ -268,8 +269,6 @@ export class SplashScene extends Phaser.Scene {
                 .setScale(isSelected ? 1.03 : 1);
         });
 
-        this.passwordInput = '';
-        this.refreshPasswordDisplay();
         this.statusText.setColor('#ffdba8');
         this.statusText.setText('');
     }
@@ -281,7 +280,9 @@ export class SplashScene extends Phaser.Scene {
 
         this.passwordText.setText(
             isUsingDomInput
-                ? `${selectedProject.label} password`
+                ? this.isPasswordPromptOpen
+                    ? `Unlock ${selectedProject.label}`
+                    : 'Click a project to enter its password'
                 : `${selectedProject.label} password: ${obscuredPassword}`,
         );
 
@@ -308,6 +309,7 @@ export class SplashScene extends Phaser.Scene {
 
         this.passwordInput = '';
         this.refreshPasswordDisplay();
+        this.closePasswordPrompt();
 
         if (selectedProject.action === 'start-game') {
             this.scene.start('StartScene');
@@ -330,6 +332,7 @@ export class SplashScene extends Phaser.Scene {
 
         const overlay = document.createElement('div');
         overlay.className = 'splash-password-overlay';
+        overlay.hidden = true;
 
         const input = document.createElement('input');
         input.type = 'password';
@@ -362,12 +365,21 @@ export class SplashScene extends Phaser.Scene {
             input.focus();
         });
 
-        overlay.append(input, button);
+        const cancelButton = document.createElement('button');
+        cancelButton.type = 'button';
+        cancelButton.className = 'splash-password-button splash-password-button--ghost';
+        cancelButton.textContent = 'Cancel';
+        cancelButton.addEventListener('click', () => {
+            this.closePasswordPrompt();
+        });
+
+        overlay.append(input, button, cancelButton);
         wrapper.appendChild(overlay);
 
         this.passwordOverlayElement = overlay;
         this.passwordInputElement = input;
         this.passwordSubmitButton = button;
+        this.passwordCancelButton = cancelButton;
     }
 
     private destroyPasswordOverlay(): void {
@@ -375,5 +387,29 @@ export class SplashScene extends Phaser.Scene {
         this.passwordOverlayElement = null;
         this.passwordInputElement = null;
         this.passwordSubmitButton = null;
+        this.passwordCancelButton = null;
+        this.isPasswordPromptOpen = false;
+    }
+
+    private openPasswordPrompt(): void {
+        this.isPasswordPromptOpen = true;
+        this.passwordInput = '';
+        this.statusText.setColor('#ffdba8');
+        this.statusText.setText('');
+        this.passwordOverlayElement?.removeAttribute('hidden');
+        this.refreshPasswordDisplay();
+        window.setTimeout(() => {
+            this.passwordInputElement?.focus();
+        }, 0);
+    }
+
+    private closePasswordPrompt(): void {
+        this.isPasswordPromptOpen = false;
+        this.passwordInput = '';
+        this.passwordOverlayElement?.setAttribute('hidden', '');
+        this.passwordInputElement?.blur();
+        this.statusText.setColor('#ffdba8');
+        this.statusText.setText('');
+        this.refreshPasswordDisplay();
     }
 }

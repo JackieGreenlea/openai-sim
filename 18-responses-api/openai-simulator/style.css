@@ -42,17 +42,26 @@ body {
 .splash-password-overlay {
     position: absolute;
     left: 50%;
-    bottom: 120px;
-    transform: translateX(-50%);
-    width: min(420px, calc(100% - 48px));
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: min(360px, calc(100% - 48px));
     display: flex;
-    gap: 10px;
+    flex-direction: column;
+    gap: 12px;
     z-index: 20;
     pointer-events: auto;
+    padding: 18px;
+    border-radius: 18px;
+    background: rgba(21, 13, 31, 0.96);
+    border: 2px solid rgba(220, 196, 246, 0.32);
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.44);
+}
+
+.splash-password-overlay[hidden] {
+    display: none;
 }
 
 .splash-password-input {
-    flex: 1 1 auto;
     min-width: 0;
     border: 2px solid rgba(220, 196, 246, 0.48);
     border-radius: 12px;
@@ -91,6 +100,10 @@ body {
 .splash-password-button:focus-visible {
     border-color: rgba(240, 216, 255, 0.95);
     background: rgba(101, 74, 129, 0.98);
+}
+
+.splash-password-button--ghost {
+    background: rgba(37, 27, 52, 0.96);
 }
 
 #debug-panel-root {
@@ -288,9 +301,7 @@ body {
 
 @media (max-width: 720px) {
     .splash-password-overlay {
-        bottom: 134px;
-        width: min(420px, calc(100% - 32px));
-        flex-direction: column;
+        width: min(360px, calc(100% - 32px));
     }
 
     .splash-password-input,
