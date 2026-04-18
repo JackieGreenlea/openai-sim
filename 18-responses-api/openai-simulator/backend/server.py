@@ -17,10 +17,19 @@ OPENAI_RESPONSES_URL = "https://api.openai.com/v1/responses"
 load_dotenv(".env.local")
 load_dotenv(".env")
 
+
+def parse_allowed_origins() -> list[str]:
+    configured = os.environ.get("ALLOWED_ORIGINS", "").strip()
+    if configured:
+        return [origin.strip() for origin in configured.split(",") if origin.strip()]
+
+    return ["http://127.0.0.1:5173", "http://localhost:5173"]
+
+
 app = FastAPI(title="OpenAI Simulator Backend")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://127.0.0.1:5173", "http://localhost:5173"],
+    allow_origins=parse_allowed_origins(),
     allow_credentials=False,
     allow_methods=["GET", "POST"],
     allow_headers=["Content-Type"],

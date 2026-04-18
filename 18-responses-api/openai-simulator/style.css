@@ -89,3 +89,114 @@ body {
 .debug-panel.collapsed .debug-panel__content {
     display: none;
 }
+
+#editor-panel-root {
+    display: none;
+    width: min(100%, 1048px);
+    align-self: center;
+    box-sizing: border-box;
+    padding: 0 18px 18px;
+    gap: 14px;
+    background: rgba(8, 6, 16, 0.92);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 -8px 18px rgba(0, 0, 0, 0.25);
+}
+
+#editor-panel-root.active {
+    display: grid;
+    grid-template-columns: minmax(280px, 1fr) minmax(360px, 520px);
+}
+
+.editor-pane {
+    background: rgba(23, 18, 36, 0.96);
+    border: 1px solid rgba(162, 244, 191, 0.18);
+    border-radius: 14px;
+    padding: 14px;
+    color: #fff8e7;
+    font-family: monospace;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.editor-pane__title {
+    margin: 0 0 10px;
+    font-size: 14px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #a2f4bf;
+}
+
+.editor-pane__meta {
+    margin: 0 0 12px;
+    font-size: 13px;
+    line-height: 1.55;
+    color: rgba(255, 248, 231, 0.88);
+    white-space: pre-wrap;
+}
+
+.editor-pane__hint {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.5;
+    color: rgba(255, 248, 231, 0.72);
+}
+
+.editor-furniture-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 10px;
+    max-height: 420px;
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+.editor-furniture-item {
+    appearance: none;
+    border: 1px solid rgba(162, 244, 191, 0.16);
+    border-radius: 12px;
+    background: rgba(36, 28, 52, 0.92);
+    color: #fff8e7;
+    padding: 10px 8px 8px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    text-align: center;
+    font: inherit;
+}
+
+.editor-furniture-item:hover,
+.editor-furniture-item:focus-visible {
+    border-color: rgba(162, 244, 191, 0.44);
+    background: rgba(48, 38, 68, 0.96);
+}
+
+.editor-furniture-item.is-selected {
+    border-color: rgba(162, 244, 191, 0.82);
+    box-shadow: 0 0 0 1px rgba(162, 244, 191, 0.35);
+    background: rgba(58, 47, 78, 0.98);
+}
+
+.editor-furniture-item canvas {
+    display: block;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+    max-width: 92px;
+    max-height: 84px;
+}
+
+.editor-furniture-item__label {
+    font-size: 12px;
+    line-height: 1.35;
+}
+
+.editor-furniture-item__meta {
+    font-size: 11px;
+    color: rgba(255, 248, 231, 0.62);
+}
+
+@media (max-width: 960px) {
+    #editor-panel-root.active {
+        grid-template-columns: 1fr;
+    }
+}

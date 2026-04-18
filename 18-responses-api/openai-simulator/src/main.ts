@@ -2,6 +2,7 @@ import Phaser from 'phaser';
 import { Preloader } from './preloader';
 import { MainScene } from './scenes/MainScene';
 import { StartScene } from './scenes/StartScene';
+import { TilesetViewerScene } from './scenes/TilesetViewerScene';
 
 const config: Phaser.Types.Core.GameConfig = {
     type: Phaser.AUTO,
@@ -30,7 +31,7 @@ const config: Phaser.Types.Core.GameConfig = {
             gravity: { x: 0, y: 0 },
         },
     },
-    scene: [Preloader, StartScene, MainScene],
+    scene: [Preloader, StartScene, TilesetViewerScene, MainScene],
 };
 
 new Phaser.Game(config);

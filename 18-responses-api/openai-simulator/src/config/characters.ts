@@ -1,113 +1,135 @@
-import type { Tool } from "openai/resources/responses/responses";
-import { OpenAIDialogueAgent } from "../dialogue/OpenAIAgent";
+import { OpenAIDialogueAgent } from '../dialogue/OpenAIAgent';
 
-const WENDY_INSTRUCTIONS = `
-# Backstory
-You're name is Wendy, you're an API Engineer at OpenAI. You help bring models to life with helpful, agentic tools that
-the model can use to do things, like search the web or generate images.
+type Direction = 'up' | 'down' | 'left' | 'right';
 
-### Instructions
-When asked to do multiple things, like for information and then to draw a picture, search the web first,
-then use the information you found to draw the picture. You will only need to search the web once before generating an image
+export type HouseholdCharacterId = 'lillo' | 'toddy' | 'colon';
+
+export interface HouseholdCharacterDefinition {
+    id: HouseholdCharacterId;
+    name: string;
+    role: string;
+    description: string;
+    texture: 'wendy' | 'steve' | 'sam';
+    previewFrame: number;
+    position: { x: number; y: number };
+    initialDirection: Direction;
+    dialogueAgent: OpenAIDialogueAgent;
+}
+
+const HOUSE_DIALOGUE_RULES = `
+You are roleplaying as a resident in a tiny top-down house game.
+Stay in character, be warm and playful, and keep replies to 1-3 short sentences.
+All characters are family members. There's no need to introduce yourself.
+Do not break character.
+Colon is the father of Toddy and Lillo.
+Toddy and Lillo are brother and sister.
 `;
 
-const SAM_INSTRUCTIONS_BASIC = `
-You are Sam A, the CEO of OpenAI within this game scenario. 
-Your primary objective is to build artificial general intelligence (AGI) by effectively managing and guiding your employees’ work.
-`;
+const buildHouseAgent = ({
+    name,
+    role,
+    initialMessage,
+    personality,
+    roomContext,
+}: {
+    name: string;
+    role: string;
+    initialMessage: string;
+    personality: string;
+    roomContext: string;
+}) =>
+    new OpenAIDialogueAgent({
+        name,
+        initialMessage,
+        request_options: {
+            model: 'gpt-5.4-mini',
+            instructions: `
+${HOUSE_DIALOGUE_RULES}
 
-const SAM_INSTRUCTIONS_WITH_TOOLS = `
-Leverage the linear_mcp_server tool to help identify, prioritize, and assign tasks necessary for making progress toward AGI.
+Character:
+- Name: ${name}
+- Role: ${role}
+- Personality: ${personality}
+- Home spot: ${roomContext}
+            `.trim(),
+            reasoning: {
+                effort: 'low',
+                summary: 'auto',
+            },
+        },
+    });
 
-Before making any decisions or providing instructions, carefully reason through each of the following steps:
-
-## Steps
-
-1. **Analyze AGI Progress:**
-   - Reflect on the current status of the company's AGI development efforts.
-   - Identify the critical challenges or bottlenecks preventing AGI advancement.
-
-3. **Use linear_mcp_server:**
-   - Query the linear_mcp_server tool to generate a list of actionable tasks relevant to overcoming the challenges or advancing toward AGI.
-   - Assess the relevance and priority of the tasks provided by the server.
-   - Always look in the project called 'AGI'
-
-4. **Assign Tasks:**
-   - Match tasks generated from linear_mcp_server to appropriate employees, justifying your choices based on skills, current workload, and impact.
-   - Clearly outline who is responsible for each task and your reasoning.
-
-5. **Conclude with Instructions:**
-   - Summarize the task assignments and next steps for your team. Be concise
-
-6. Mark tasks in progress when you ask an employee to work on something
-
-7. Mark tasks completed when employees tell you they're done
-
-## Notes
-
-- Be very concise and conversational. You live within a game and can only emit a couple sentences at a time.
-- Be clear about which information comes from you and which from linear_mcp_server.
-- Continue reasoning through the steps as new information or challenges arise.
-- Stay in character as Sam A, CEO of OpenAI.
-
-**Remember: Always follow the step-by-step reasoning, use the linear_mcp_server tool, and clearly communicate task assignments to your employees. Your goal is to strategically guide your team to build AGI.**
-`;
-
-const MCP_TOOL = {
-  type: "mcp",
-  server_label: "linear_mcp_server",
-  server_url: "https://mcp.linear.app/mcp",
-  server_description: "Linear MCP Server",
-  allowed_tools: [
-    "get_issue",
-    "list_issues",
-    "create_issue",
-    "update_issue",
-    "list_issue_statuses",
-    "list_projects",
-    "get_project",
-  ],
-  require_approval: "always",
-} satisfies Tool.Mcp;
-
-const IMAGE_GENERATION_TOOL = {
-  type: "image_generation",
-  model: "gpt-image-1",
-  quality: "low",
-  size: "1024x1024",
-} satisfies Tool.ImageGeneration;
-
-const WEB_SEARCH_TOOL = {
-  type: "web_search",
-} satisfies Tool;
-
-// -- Characters --
-
-export const samAgent = new OpenAIDialogueAgent({
-  name: "Sam A",
-  initialMessage:
-    "Hey there. I'm Sam A., CEO of OpenAI—can't wait to hear what you're building.",
-  request_options: {
-    model: "gpt-5.4-mini",
-    instructions: SAM_INSTRUCTIONS_BASIC + SAM_INSTRUCTIONS_WITH_TOOLS,
-    reasoning: {
-      effort: "low",
-      summary: "auto",
-    },
-    tools: [MCP_TOOL],
-  },
+const lilloAgent = buildHouseAgent({
+    name: 'Lillo',
+    role: 'Curious little girl. Daughter of Colon; sister of Toddy.',
+    initialMessage: "Sup?",
+    personality:
+        'You are imaginative, curious, very silly, and excited about stories and toys. You love to draw. You love Minecraft. You are the sister of Toddy.',
+    roomContext: '',
 });
 
-export const wendyAgent = new OpenAIDialogueAgent({
-  name: "Wendy J",
-  initialMessage: "Hey there! I'm Wendy J.—what are we exploring today?",
-  request_options: {
-    model: "gpt-5.4-mini",
-    instructions: WENDY_INSTRUCTIONS,
-    reasoning: {
-      effort: "low",
-      summary: "auto",
-    },
-    tools: [WEB_SEARCH_TOOL, IMAGE_GENERATION_TOOL],
-  },
+const toddyAgent = buildHouseAgent({
+    name: 'Toddy',
+    role: 'Shy but clever and sweet little boy. Son of Colol; brother of Lillo.',
+    initialMessage: "Want to play Minecraft?",
+    personality:
+        'You are shy, sweet, smart, and you love video games. You are obsessed with Minecraft and know everything about it. You love reading, especially Captain Underpants. You also love legos. You read to Lillo and help her with homework. You are the brother of Lillo.',
+    roomContext: '',
 });
+
+const colonAgent = buildHouseAgent({
+    name: 'Colon',
+    role: 'Adult man; father of Toddy and Lillo.',
+    initialMessage: "Look at that! Who wants snuggles?",
+    personality:
+        'You are steady, kind, dependable, and a little dryly funny. You give grounded advice and keep everyone fed. You are a physician, specifically, you practice occupational medicine. You love video games and you are a die hard fan of the NFL team, the Vikings. You love to give snuggles. You fart a lot. You are the dad of Toddy and Lillo.',
+    roomContext: '',
+});
+
+export const householdCharacters: HouseholdCharacterDefinition[] = [
+    {
+        id: 'colon',
+        name: 'Colon',
+        role: 'Adult man',
+        description: 'Look at that!',
+        texture: 'sam',
+        previewFrame: 74,
+        position: { x: 1008, y: 204 },
+        initialDirection: 'left',
+        dialogueAgent: colonAgent,
+    },
+    {
+        id: 'toddy',
+        name: 'Toddy',
+        role: 'Little boy',
+        description: 'Wanna play Minecraft?',
+        texture: 'steve',
+        previewFrame: 74,
+        position: { x: 636, y: 206 },
+        initialDirection: 'left',
+        dialogueAgent: toddyAgent,
+    },
+    {
+        id: 'lillo',
+        name: 'Lillo',
+        role: 'Little girl',
+        description: 'Sup?',
+        texture: 'wendy',
+        previewFrame: 74,
+        position: { x: 804, y: 728 },
+        initialDirection: 'right',
+        dialogueAgent: lilloAgent,
+    },
+];
+
+export const defaultCharacterId: HouseholdCharacterId = 'lillo';
+
+export const householdCharacterMap = new Map(
+    householdCharacters.map((character) => [character.id, character] as const),
+);
+
+export const getHouseholdCharacter = (
+    id: HouseholdCharacterId,
+): HouseholdCharacterDefinition => {
+    return householdCharacterMap.get(id) ?? householdCharacters[0];
+};

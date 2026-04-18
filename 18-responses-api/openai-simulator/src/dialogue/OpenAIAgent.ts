@@ -20,11 +20,13 @@ export interface OpenAIDialogueAgentOptions extends DialogueAgentOptions {
 
 export class OpenAIDialogueAgent extends BaseDialogueAgent {
     private readonly requestOptions?: OpenAIResponseRequestOptions;
+    private readonly apiBaseUrl: string;
 
     constructor(config: OpenAIDialogueAgentOptions) {
         super(config);
 
         this.requestOptions = config.request_options;
+        this.apiBaseUrl = (import.meta.env.VITE_API_BASE_URL ?? '').replace(/\/$/, '');
     }
 
     protected async *provideResponseStream(
@@ -147,7 +149,7 @@ export class OpenAIDialogueAgent extends BaseDialogueAgent {
         request_options: OpenAIResponseRequestOptions;
         input: ResponseInput;
     }): AsyncGenerator<ResponseStreamEvent> {
-        const response = await fetch('/api/responses/stream', {
+        const response = await fetch(`${this.apiBaseUrl}/api/responses/stream`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

@@ -185,6 +185,21 @@ export class Character {
         this.playAnimation(idleKey);
     }
 
+    public sit(direction: Direction): void {
+        this.facing = direction;
+        this.sprite.setVelocity(0, 0);
+
+        const sitFrames = this.frames.sit[direction];
+
+        if (!sitFrames || sitFrames.length === 0) {
+            this.idle();
+            return;
+        }
+
+        const sitKey = this.animationKey('sit');
+        this.playAnimation(sitKey);
+    }
+
     public faceTowards(target: Phaser.Types.Math.Vector2Like): void {
         const dx = target.x - this.sprite.x;
         const dy = target.y - this.sprite.y;
@@ -233,6 +248,16 @@ export class Character {
         (Object.entries(this.frames.idle) as Array<[Direction, number[]]>).forEach(
             ([direction, frames]) => {
                 this.ensureAnimation(`${this.texture}-idle-${direction}`, frames, 4);
+            },
+        );
+
+        (Object.entries(this.frames.sit) as Array<[Direction, number[] | null]>).forEach(
+            ([direction, frames]) => {
+                if (!frames || frames.length === 0) {
+                    return;
+                }
+
+                this.ensureAnimation(`${this.texture}-sit-${direction}`, frames, 6);
             },
         );
     }

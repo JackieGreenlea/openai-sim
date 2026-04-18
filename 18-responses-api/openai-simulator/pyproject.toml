@@ -9,6 +9,9 @@ dependencies = [
     "uvicorn[standard]>=0.30.0",
 ]
 
+[project.scripts]
+app = "backend.server:app"
+
 [dependency-groups]
 dev = [
     "ruff>=0.8.0",
