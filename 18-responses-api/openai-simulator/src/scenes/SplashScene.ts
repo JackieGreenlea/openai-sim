@@ -24,7 +24,7 @@ const PROJECTS: ProjectCardConfig[] = [
         id: 'project-2',
         label: 'Project 2',
         subtitle: 'Ollie Valley',
-        password: 'Cassie1',
+        password: 'Cassie',
         action: 'placeholder',
     },
     {
@@ -73,7 +73,7 @@ export class SplashScene extends Phaser.Scene {
             .setOrigin(0.5);
 
         this.add
-            .text(width / 2, 146, 'Fun little password gate. Pick one and type the password.', {
+            .text(width / 2, 146, 'Select and enter password.', {
                 fontFamily: '"Abaddon Light", sans-serif',
                 fontSize: '24px',
                 color: '#e7d6f4',
@@ -216,6 +216,8 @@ export class SplashScene extends Phaser.Scene {
 
         if (Phaser.Input.Keyboard.JustDown(this.backspaceKey)) {
             this.passwordInput = this.passwordInput.slice(0, -1);
+            this.statusText.setColor('#ffdba8');
+            this.statusText.setText('');
             this.refreshPasswordDisplay();
         }
 
@@ -243,6 +245,8 @@ export class SplashScene extends Phaser.Scene {
         }
 
         this.passwordInput += event.key;
+        this.statusText.setColor('#ffdba8');
+        this.statusText.setText('');
         this.refreshPasswordDisplay();
     }
 
@@ -255,6 +259,9 @@ export class SplashScene extends Phaser.Scene {
                 .setScale(isSelected ? 1.03 : 1);
         });
 
+        this.passwordInput = '';
+        this.refreshPasswordDisplay();
+        this.statusText.setColor('#ffdba8');
         this.statusText.setText('');
     }
 
