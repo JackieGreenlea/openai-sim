@@ -16,7 +16,7 @@ const PROJECTS: ProjectCardConfig[] = [
     {
         id: 'project-1',
         label: 'Project 1',
-        subtitle: 'Archive',
+        subtitle: 'Harmony Forest',
         password: 'hello',
         action: 'placeholder',
     },
@@ -48,6 +48,9 @@ export class SplashScene extends Phaser.Scene {
     private passwordText!: Phaser.GameObjects.Text;
     private statusText!: Phaser.GameObjects.Text;
     private hintText!: Phaser.GameObjects.Text;
+    private passwordOverlayElement: HTMLDivElement | null = null;
+    private passwordInputElement: HTMLInputElement | null = null;
+    private passwordSubmitButton: HTMLButtonElement | null = null;
 
     constructor() {
         super({ key: 'SplashScene' });
@@ -188,8 +191,10 @@ export class SplashScene extends Phaser.Scene {
         keyboard.on('keydown', this.handleTyping, this);
         this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
             keyboard.off('keydown', this.handleTyping, this);
+            this.destroyPasswordOverlay();
         });
 
+        this.createPasswordOverlay();
         this.refreshSelection();
         this.refreshPasswordDisplay();
     }
@@ -227,6 +232,10 @@ export class SplashScene extends Phaser.Scene {
     }
 
     private handleTyping(event: KeyboardEvent): void {
+        if (this.passwordInputElement && document.activeElement === this.passwordInputElement) {
+            return;
+        }
+
         if (event.key.length !== 1) {
             return;
         }
@@ -267,10 +276,23 @@ export class SplashScene extends Phaser.Scene {
 
     private refreshPasswordDisplay(): void {
         const selectedProject = PROJECTS[this.selectedIndex];
-        const obscuredPassword = this.passwordInput.length > 0 ? '•'.repeat(this.passwordInput.length) : '';
+        const obscuredPassword = this.passwordInput.length > 0 ? '•'.repeat(this.passwordInput.length) : '...';
+        const isUsingDomInput = !!this.passwordInputElement;
+
         this.passwordText.setText(
-            `${selectedProject.label} password: ${obscuredPassword || '...'}`,
+            isUsingDomInput
+                ? `${selectedProject.label} password`
+                : `${selectedProject.label} password: ${obscuredPassword}`,
         );
+
+        if (this.passwordInputElement) {
+            if (this.passwordInputElement.value !== this.passwordInput) {
+                this.passwordInputElement.value = this.passwordInput;
+            }
+
+            this.passwordInputElement.placeholder = `${selectedProject.label} password`;
+            this.passwordInputElement.setAttribute('aria-label', `${selectedProject.label} password`);
+        }
     }
 
     private attemptUnlock(): void {
@@ -294,5 +316,64 @@ export class SplashScene extends Phaser.Scene {
 
         this.statusText.setColor('#d6ffd8');
         this.statusText.setText(`${selectedProject.label} unlocked. Still cooking in the tomato lab.`);
+    }
+
+    private createPasswordOverlay(): void {
+        if (typeof document === 'undefined') {
+            return;
+        }
+
+        const wrapper = document.getElementById('phaser-wrapper');
+        if (!wrapper || this.passwordOverlayElement) {
+            return;
+        }
+
+        const overlay = document.createElement('div');
+        overlay.className = 'splash-password-overlay';
+
+        const input = document.createElement('input');
+        input.type = 'password';
+        input.className = 'splash-password-input';
+        input.autocomplete = 'off';
+        input.autocapitalize = 'none';
+        input.spellcheck = false;
+        input.maxLength = 24;
+        input.placeholder = `${PROJECTS[this.selectedIndex].label} password`;
+        input.setAttribute('aria-label', `${PROJECTS[this.selectedIndex].label} password`);
+        input.addEventListener('input', () => {
+            this.passwordInput = input.value.slice(0, 24);
+            this.statusText.setColor('#ffdba8');
+            this.statusText.setText('');
+            this.refreshPasswordDisplay();
+        });
+        input.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                this.attemptUnlock();
+            }
+        });
+
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'splash-password-button';
+        button.textContent = 'Unlock';
+        button.addEventListener('click', () => {
+            this.attemptUnlock();
+            input.focus();
+        });
+
+        overlay.append(input, button);
+        wrapper.appendChild(overlay);
+
+        this.passwordOverlayElement = overlay;
+        this.passwordInputElement = input;
+        this.passwordSubmitButton = button;
+    }
+
+    private destroyPasswordOverlay(): void {
+        this.passwordOverlayElement?.remove();
+        this.passwordOverlayElement = null;
+        this.passwordInputElement = null;
+        this.passwordSubmitButton = null;
     }
 }

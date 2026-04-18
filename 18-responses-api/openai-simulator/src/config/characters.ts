@@ -94,7 +94,7 @@ export const householdCharacters: HouseholdCharacterDefinition[] = [
         description: 'Look at that!',
         texture: 'sam',
         previewFrame: 74,
-        position: { x: 1008, y: 204 },
+        position: { x: 1100, y: 155 },
         initialDirection: 'left',
         dialogueAgent: colonAgent,
     },
