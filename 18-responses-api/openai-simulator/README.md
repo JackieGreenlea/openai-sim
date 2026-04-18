@@ -31,6 +31,7 @@ The simplest reliable deploy is:
 
 Frontend project:
 
+- Root Directory: `18-responses-api/openai-simulator`
 - Framework preset: `Vite`
 - Build command: `npm run build`
 - Output directory: `dist`
@@ -40,7 +41,7 @@ Frontend project:
 Backend project:
 
 - Framework preset: `FastAPI` (or `Other` with Python runtime)
-- Root can stay at this repo root
+- Root Directory: `18-responses-api/openai-simulator/backend`
 - Environment variables:
   - `OPENAI_API_KEY=...`
   - `LINEAR_API_KEY=...` (optional)
