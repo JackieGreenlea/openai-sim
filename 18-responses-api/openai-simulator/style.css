@@ -140,6 +140,36 @@ body {
     color: rgba(255, 248, 231, 0.72);
 }
 
+.editor-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0 0 12px;
+}
+
+.editor-action-button {
+    appearance: none;
+    border: 1px solid rgba(162, 244, 191, 0.22);
+    border-radius: 10px;
+    background: rgba(36, 28, 52, 0.96);
+    color: #fff8e7;
+    padding: 8px 10px;
+    cursor: pointer;
+    font: inherit;
+    font-size: 12px;
+    line-height: 1.2;
+}
+
+.editor-action-button:hover,
+.editor-action-button:focus-visible {
+    border-color: rgba(162, 244, 191, 0.46);
+    background: rgba(52, 42, 74, 0.98);
+}
+
+.editor-import-input {
+    display: none;
+}
+
 .editor-furniture-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));

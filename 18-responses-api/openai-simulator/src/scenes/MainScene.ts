@@ -4,6 +4,7 @@ import { defaultCharacterId, type HouseholdCharacterId } from '../config/charact
 import { Character } from '../gameobjects/Character';
 import type { DialogueAgent, DialogueStreamChunk } from '../dialogue/BaseDialogueAgent';
 import { DebugEventPanel } from '../ui/DebugEventPanel';
+import bakedDefaultEditableLayoutState from '../data/defaultEditableLayout.json';
 
 type Direction = 'up' | 'down' | 'left' | 'right';
 type BossType = 'demon' | 'nightborne' | 'flying-demons';
@@ -138,6 +139,9 @@ const LEGACY_BED_COLLIDER_IDS = new Set([
 ]);
 let sessionEditableLayoutState: SavedEditableTargetState[] | null = null;
 let spawnedEditableTargetCounter = 1;
+const DEFAULT_EDITABLE_LAYOUT_STATE = Array.isArray(bakedDefaultEditableLayoutState)
+    ? (bakedDefaultEditableLayoutState as SavedEditableTargetState[])
+    : [];
 
 const PLAYER_FRAMES = {
     walk: {
@@ -727,6 +731,12 @@ export class MainScene extends Phaser.Scene {
     private editorFurnitureHint: HTMLElement | null = null;
     private editorFurnitureGrid: HTMLElement | null = null;
     private editorFurnitureButtons: HTMLButtonElement[] = [];
+    private editorActionRow: HTMLElement | null = null;
+    private editorExportButton: HTMLButtonElement | null = null;
+    private editorImportButton: HTMLButtonElement | null = null;
+    private editorCopyBakeButton: HTMLButtonElement | null = null;
+    private editorLoadDefaultButton: HTMLButtonElement | null = null;
+    private editorImportInput: HTMLInputElement | null = null;
     private editableUndoStack: SavedEditableTargetState[][] = [];
     private hasActiveDragUndoSnapshot = false;
     private editModeZoom = PLAY_CAMERA_ZOOM;
@@ -3065,7 +3075,51 @@ export class MainScene extends Phaser.Scene {
         const infoHint = document.createElement('p');
         infoHint.className = 'editor-pane__hint';
 
-        infoPane.append(infoTitle, infoMeta, infoHint);
+        const actionRow = document.createElement('div');
+        actionRow.className = 'editor-actions';
+
+        const exportButton = document.createElement('button');
+        exportButton.type = 'button';
+        exportButton.className = 'editor-action-button';
+        exportButton.textContent = 'Export Layout';
+        exportButton.addEventListener('click', () => {
+            this.exportEditableLayoutState();
+        });
+
+        const importButton = document.createElement('button');
+        importButton.type = 'button';
+        importButton.className = 'editor-action-button';
+        importButton.textContent = 'Import Layout';
+        importButton.addEventListener('click', () => {
+            this.editorImportInput?.click();
+        });
+
+        const copyBakeButton = document.createElement('button');
+        copyBakeButton.type = 'button';
+        copyBakeButton.className = 'editor-action-button';
+        copyBakeButton.textContent = 'Copy Bake JSON';
+        copyBakeButton.addEventListener('click', () => {
+            this.copyEditableLayoutBakeJson();
+        });
+
+        const loadDefaultButton = document.createElement('button');
+        loadDefaultButton.type = 'button';
+        loadDefaultButton.className = 'editor-action-button';
+        loadDefaultButton.textContent = 'Load Shipped Default';
+        loadDefaultButton.addEventListener('click', () => {
+            this.loadBakedDefaultEditableLayoutState();
+        });
+
+        const importInput = document.createElement('input');
+        importInput.type = 'file';
+        importInput.accept = 'application/json,.json';
+        importInput.className = 'editor-import-input';
+        importInput.addEventListener('change', (event) => {
+            void this.handleEditableLayoutImport(event);
+        });
+
+        actionRow.append(exportButton, importButton, copyBakeButton, loadDefaultButton, importInput);
+        infoPane.append(infoTitle, infoMeta, actionRow, infoHint);
 
         const furniturePane = document.createElement('section');
         furniturePane.className = 'editor-pane';
@@ -3119,6 +3173,12 @@ export class MainScene extends Phaser.Scene {
         this.editorFurnitureMeta = furnitureMeta;
         this.editorFurnitureHint = furnitureHint;
         this.editorFurnitureGrid = furnitureGrid;
+        this.editorActionRow = actionRow;
+        this.editorExportButton = exportButton;
+        this.editorImportButton = importButton;
+        this.editorCopyBakeButton = copyBakeButton;
+        this.editorLoadDefaultButton = loadDefaultButton;
+        this.editorImportInput = importInput;
     }
 
     private hideEditorPanels(): void {
@@ -3153,7 +3213,9 @@ export class MainScene extends Phaser.Scene {
                 'E exit edit mode, click objects to select, drag to move.',
                 'Q/W choose targets, D duplicates, Delete removes.',
                 'Cmd/Ctrl+S saves, Cmd/Ctrl+Z undoes, F toggles furniture placement.',
+                'Export/Import moves layouts between localhost and deployed builds.',
                 'Mouse wheel zooms the editor view, and - / + / 0 also control zoom.',
+                'Copy Bake JSON is for src/data/defaultEditableLayout.json when you want a shipped default.',
                 '[ and ] resize the selected wall when the furniture menu is closed, or switch furniture when it is open.',
                 'Enter places at camera, and clicking empty floor places at the cursor.',
             ].join(' ');
@@ -3348,6 +3410,12 @@ export class MainScene extends Phaser.Scene {
         return states.filter((state) => !LEGACY_BED_COLLIDER_IDS.has(state.id));
     }
 
+    private getBakedDefaultEditableLayoutState(): SavedEditableTargetState[] {
+        return this.cloneEditableLayoutState(
+            this.normalizeSavedLayoutState(DEFAULT_EDITABLE_LAYOUT_STATE),
+        );
+    }
+
     private markEditableLayoutDirty(): void {
         this.persistEditableLayoutState();
         this.layoutSaveStatus = 'Unsaved changes';
@@ -3368,6 +3436,14 @@ export class MainScene extends Phaser.Scene {
             const raw = window.localStorage.getItem(EDITABLE_LAYOUT_STORAGE_KEY);
 
             if (!raw) {
+                const bakedDefault = this.getBakedDefaultEditableLayoutState();
+
+                if (bakedDefault.length > 0) {
+                    sessionEditableLayoutState = bakedDefault;
+                    this.layoutSaveStatus = 'Loaded shipped default layout';
+                    return;
+                }
+
                 this.layoutSaveStatus = 'Cmd/Ctrl+S to save edits';
                 return;
             }
@@ -3407,6 +3483,128 @@ export class MainScene extends Phaser.Scene {
             console.warn('Failed to save editable layout', error);
             this.layoutSaveStatus = 'Save failed';
         }
+    }
+
+    private exportEditableLayoutState(): void {
+        this.persistEditableLayoutState();
+
+        if (typeof window === 'undefined' || typeof document === 'undefined') {
+            this.layoutSaveStatus = 'Export unavailable in this browser';
+            this.refreshEditModeUi();
+            return;
+        }
+
+        try {
+            const serialized = JSON.stringify(sessionEditableLayoutState ?? [], null, 2);
+            const blob = new Blob([serialized], { type: 'application/json' });
+            const url = window.URL.createObjectURL(blob);
+            const anchor = document.createElement('a');
+            anchor.href = url;
+            anchor.download = 'openai-simulator-layout.json';
+            document.body.appendChild(anchor);
+            anchor.click();
+            anchor.remove();
+            window.URL.revokeObjectURL(url);
+            this.layoutSaveStatus = 'Exported layout JSON';
+        } catch (error) {
+            console.warn('Failed to export editable layout', error);
+            this.layoutSaveStatus = 'Export failed';
+        }
+
+        this.refreshEditModeUi();
+    }
+
+    private copyEditableLayoutBakeJson(): void {
+        this.persistEditableLayoutState();
+
+        if (typeof window === 'undefined' || !navigator.clipboard?.writeText) {
+            this.layoutSaveStatus = 'Clipboard unavailable here';
+            this.refreshEditModeUi();
+            return;
+        }
+
+        const serialized = JSON.stringify(sessionEditableLayoutState ?? [], null, 2);
+        navigator.clipboard
+            .writeText(serialized)
+            .then(() => {
+                this.layoutSaveStatus = 'Copied bake JSON for defaultEditableLayout.json';
+                this.refreshEditModeUi();
+            })
+            .catch((error) => {
+                console.warn('Failed to copy editable layout JSON', error);
+                this.layoutSaveStatus = 'Copy failed';
+                this.refreshEditModeUi();
+            });
+    }
+
+    private async handleEditableLayoutImport(event: Event): Promise<void> {
+        const input = event.currentTarget;
+
+        if (!(input instanceof HTMLInputElement)) {
+            return;
+        }
+
+        const file = input.files?.[0];
+        input.value = '';
+
+        if (!file) {
+            return;
+        }
+
+        try {
+            const raw = await file.text();
+            const parsed = JSON.parse(raw);
+
+            if (!Array.isArray(parsed) || parsed.length === 0) {
+                this.layoutSaveStatus = 'Imported layout was empty or invalid';
+                this.refreshEditModeUi();
+                return;
+            }
+
+            this.pushUndoSnapshot();
+            this.applyEditableLayoutState(
+                parsed as SavedEditableTargetState[],
+                'Imported layout (unsaved)',
+            );
+        } catch (error) {
+            console.warn('Failed to import editable layout', error);
+            this.layoutSaveStatus = 'Import failed';
+            this.refreshEditModeUi();
+        }
+    }
+
+    private loadBakedDefaultEditableLayoutState(): void {
+        const bakedDefault = this.getBakedDefaultEditableLayoutState();
+
+        if (bakedDefault.length === 0) {
+            this.layoutSaveStatus = 'No shipped default layout is baked in yet';
+            this.refreshEditModeUi();
+            return;
+        }
+
+        this.pushUndoSnapshot();
+        this.applyEditableLayoutState(bakedDefault, 'Loaded shipped default (unsaved)');
+    }
+
+    private applyEditableLayoutState(
+        states: SavedEditableTargetState[],
+        statusMessage: string,
+    ): void {
+        sessionEditableLayoutState = this.cloneEditableLayoutState(
+            this.normalizeSavedLayoutState(states),
+        );
+        this.restoreEditableLayoutState();
+        this.selectedEditableIndex = Phaser.Math.Clamp(
+            this.selectedEditableIndex,
+            0,
+            Math.max(this.editableTargets.length - 1, 0),
+        );
+        this.isDraggingEditable = false;
+        this.dragLastWorldPoint = null;
+        this.hasActiveDragUndoSnapshot = false;
+        this.layoutSaveStatus = statusMessage;
+        this.focusOnSelectedEditableTarget();
+        this.refreshEditModeUi();
     }
 
     private restoreEditableLayoutState(): void {
