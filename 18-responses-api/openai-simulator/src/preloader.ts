@@ -188,7 +188,7 @@ export class Preloader extends Phaser.Scene {
             console.warn('Failed to confirm fonts before start', error);
         }
 
-        this.scene.start('StartScene');
+        this.scene.start('SplashScene');
     }
 
     private async ensureFonts(): Promise<void> {
