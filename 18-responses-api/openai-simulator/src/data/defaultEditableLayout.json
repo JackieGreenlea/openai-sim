@@ -1,1 +1,919 @@
-[]
+[
+  {
+    "id": "north-wall",
+    "name": "North wall",
+    "kind": "solid",
+    "x": 672,
+    "y": 12,
+    "width": 1344,
+    "height": 24,
+    "color": 7165251
+  },
+  {
+    "id": "south-wall",
+    "name": "South wall",
+    "kind": "solid",
+    "x": 672,
+    "y": 948,
+    "width": 1344,
+    "height": 24,
+    "color": 7165251
+  },
+  {
+    "id": "west-wall",
+    "name": "West wall",
+    "kind": "solid",
+    "x": 12,
+    "y": 484,
+    "width": 24,
+    "height": 960,
+    "color": 7165251
+  },
+  {
+    "id": "east-wall",
+    "name": "East wall",
+    "kind": "solid",
+    "x": 1332,
+    "y": 480,
+    "width": 24,
+    "height": 960,
+    "color": 7165251
+  },
+  {
+    "id": "living-room-divider-upper",
+    "name": "Living room divider upper",
+    "kind": "solid",
+    "x": 720,
+    "y": 96,
+    "width": 24,
+    "height": 144,
+    "color": 7165251
+  },
+  {
+    "id": "living-room-divider-middle",
+    "name": "Living room divider middle",
+    "kind": "solid",
+    "x": 720,
+    "y": 456,
+    "width": 24,
+    "height": 384,
+    "color": 7165251
+  },
+  {
+    "id": "living-room-divider-lower",
+    "name": "Living room divider lower",
+    "kind": "solid",
+    "x": 720,
+    "y": 840,
+    "width": 24,
+    "height": 192,
+    "color": 7165251
+  },
+  {
+    "id": "bedroom-top-right-wall",
+    "name": "Bedroom top right wall",
+    "kind": "solid",
+    "x": 1066.7009452933742,
+    "y": 361.8971410091551,
+    "width": 276,
+    "height": 24,
+    "color": 7165251
+  },
+  {
+    "id": "bedroom-divider-upper",
+    "name": "Bedroom divider upper",
+    "kind": "solid",
+    "x": 1019.0400111341472,
+    "y": 650.880001859665,
+    "width": 24,
+    "height": 552,
+    "color": 7165251
+  },
+  {
+    "id": "living-room-tv-top",
+    "name": "Living room TV top",
+    "kind": "tiles",
+    "texture": "tiles_basement",
+    "frames": [759, 760, 761],
+    "tileX": 3.665556050053374,
+    "tileY": 0.17174660841986988,
+    "width": 3,
+    "baseDepth": 18,
+    "scale": 1,
+    "linkedColliders": [],
+    "linkedPoints": []
+  },
+  {
+    "id": "living-room-tv-body",
+    "name": "Living room TV body",
+    "kind": "tiles",
+    "texture": "tiles_basement",
+    "frames": [774, 775, 776, 777, 790, 791, 792, 793],
+    "tileX": 2.6495246606943943,
+    "tileY": 1.1771436045121515,
+    "width": 4,
+    "baseDepth": 18,
+    "scale": 1,
+    "linkedColliders": [],
+    "linkedPoints": []
+  },
+  {
+    "id": "living-room-couch",
+    "name": "Living room couch",
+    "kind": "tiles",
+    "texture": "tiles_basement",
+    "frames": [135, 136, 137, 151, 152, 153],
+    "tileX": 3.224088061382114,
+    "tileY": 6.0751590793167125,
+    "width": 3,
+    "baseDepth": 18,
+    "scale": 1,
+    "linkedColliders": [],
+    "linkedPoints": []
+  },
+  {
+    "id": "living-room-couch-hitbox",
+    "name": "Living room couch hitbox",
+    "kind": "collider",
+    "x": 226.544784588804,
+    "y": 333.8704802318064,
+    "width": 144,
+    "height": 96
+  },
+  {
+    "id": "living-room-tv-hitbox",
+    "name": "Living room TV hitbox",
+    "kind": "collider",
+    "x": 216,
+    "y": 96,
+    "width": 192,
+    "height": 96
+  },
+  {
+    "id": "desk-chair",
+    "name": "Desk chair",
+    "kind": "tiles",
+    "texture": "tiles_modern_office",
+    "frames": [129, 145],
+    "tileX": 12.13777768897001,
+    "tileY": 2.3888893652214764,
+    "width": 1,
+    "baseDepth": 18,
+    "scale": 1,
+    "linkedColliders": [],
+    "linkedPoints": []
+  },
+  {
+    "id": "desk",
+    "name": "Desk",
+    "kind": "tiles",
+    "texture": "tiles_modern_office",
+    "frames": [455, 456, 457, 471, 472, 473],
+    "tileX": 11.276190310108415,
+    "tileY": 0.9695243216101777,
+    "width": 3,
+    "baseDepth": 18,
+    "scale": 1,
+    "linkedColliders": [],
+    "linkedPoints": []
+  },
+  {
+    "id": "desk-computer",
+    "name": "Desk computer",
+    "kind": "tiles",
+    "texture": "tiles_modern_office",
+    "frames": [205, 206, 207],
+    "tileX": 11.196507897294113,
+    "tileY": 0.9936510900611465,
+    "width": 3,
+    "baseDepth": 18,
+    "scale": 1,
+    "linkedColliders": [],
+    "linkedPoints": []
+  },
+  {
+    "id": "bookshelf",
+    "name": "Bookshelf",
+    "kind": "tiles",
+    "texture": "tiles_modern_office",
+    "frames": [199, 200, 215, 216, 231, 232],
+    "tileX": 7.328729764032964,
+    "tileY": 0.031626888984801954,
+    "width": 2,
+    "baseDepth": 18,
+    "scale": 1,
+    "linkedColliders": [],
+    "linkedPoints": []
+  },
+  {
+    "id": "desk-hitbox",
+    "name": "Desk hitbox",
+    "kind": "collider",
+    "x": 612.8914290696747,
+    "y": 102.60572790444363,
+    "width": 144,
+    "height": 96
+  },
+  {
+    "id": "bookshelf-hitbox",
+    "name": "Bookshelf hitbox",
+    "kind": "collider",
+    "x": 401.8399860491064,
+    "y": 49.13904732018634,
+    "width": 96,
+    "height": 144
+  },
+  {
+    "id": "desk-chair-seat",
+    "name": "Desk chair seat",
+    "kind": "anchors",
+    "points": [
+      {
+        "label": "prompt",
+        "x": 605.150474418934,
+        "y": 124.43048720725318
+      },
+      {
+        "label": "sit",
+        "x": 605.150474418934,
+        "y": 166.43048720725318
+      }
+    ]
+  },
+  {
+    "id": "kitchen-fridge",
+    "name": "Kitchen fridge",
+    "kind": "tiles",
+    "texture": "tiles_kitchen",
+    "frames": [377, 393, 409],
+    "tileX": 24.586666666666556,
+    "tileY": 0.09111111111111207,
+    "width": 1,
+    "baseDepth": 18,
+    "scale": 1,
+    "linkedColliders": [],
+    "linkedPoints": []
+  },
+  {
+    "id": "kitchen-back-chair",
+    "name": "Kitchen back chair",
+    "kind": "tiles",
+    "texture": "tiles_kitchen",
+    "frames": [227],
+    "tileX": 19,
+    "tileY": 3.65,
+    "width": 1,
+    "baseDepth": 18,
+    "scale": 1,
+    "linkedColliders": [],
+    "linkedPoints": []
+  },
+  {
+    "id": "kitchen-table",
+    "name": "Kitchen table",
+    "kind": "tiles",
+    "texture": "tiles_kitchen",
+    "frames": [259, 260, 261, 275, 276, 277],
+    "tileX": 17.94000019719203,
+    "tileY": 4.0733332325021445,
+    "width": 3,
+    "baseDepth": 18,
+    "scale": 1,
+    "linkedColliders": [],
+    "linkedPoints": []
+  },
+  {
+    "id": "kitchen-fridge-hitbox",
+    "name": "Kitchen fridge hitbox",
+    "kind": "collider",
+    "x": 1202.4,
+    "y": 68.69333333333337,
+    "width": 48,
+    "height": 144
+  },
+  {
+    "id": "kitchen-table-hitbox",
+    "name": "Kitchen table hitbox",
+    "kind": "collider",
+    "x": 935.6800092744824,
+    "y": 242.55999220371254,
+    "width": 144,
+    "height": 96
+  },
+  {
+    "id": "kitchen-left-chair-seat",
+    "name": "Kitchen left chair seat",
+    "kind": "anchors",
+    "points": [
+      {
+        "label": "prompt",
+        "x": 72.07661084711442,
+        "y": 223.96114143571253
+      },
+      {
+        "label": "sit",
+        "x": 68.07661084711442,
+        "y": 283.9611414357125
+      }
+    ]
+  },
+  {
+    "id": "kitchen-right-chair-seat",
+    "name": "Kitchen right chair seat",
+    "kind": "anchors",
+    "points": [
+      {
+        "label": "prompt",
+        "x": 58.960211715152475,
+        "y": 197.6198492924342
+      },
+      {
+        "label": "sit",
+        "x": 62.960211715152354,
+        "y": 257.6198492924344
+      }
+    ]
+  },
+  {
+    "id": "bedroom-1-books",
+    "name": "Bedroom 1 books",
+    "kind": "objects",
+    "positions": [
+      {
+        "x": 772.64,
+        "y": 775.9466666666666
+      },
+      {
+        "x": 794.64,
+        "y": 785.9466666666666
+      },
+      {
+        "x": 810.64,
+        "y": 767.9466666666666
+      },
+      {
+        "x": 786.64,
+        "y": 755.9466666666666
+      },
+      {
+        "x": 784.64,
+        "y": 805.9466666666666
+      }
+    ],
+    "points": [
+      {
+        "label": "read",
+        "x": 772.64,
+        "y": 775.9466666666666
+      }
+    ],
+    "linkedColliders": []
+  },
+  {
+    "id": "bookshelf-2-copy-3",
+    "name": "Bookshelf 2 copy 3",
+    "kind": "tiles",
+    "texture": "tiles_trislin_interior",
+    "frames": [138, 139, 154, 155, 170, 171],
+    "tileX": 19.623015029378124,
+    "tileY": 7.44658685320537,
+    "width": 2,
+    "baseDepth": 18,
+    "scale": 2,
+    "linkedColliders": [
+      {
+        "x": 973.9047214101499,
+        "y": 405.43616895385776,
+        "width": 56,
+        "height": 84
+      }
+    ],
+    "linkedPoints": []
+  },
+  {
+    "id": "single-bed-2-copy-1",
+    "name": "Single Bed 2 copy 1",
+    "kind": "tiles",
+    "texture": "tiles_bitglow_beds",
+    "frames": [15, 16, 29, 30, 43, 44, 57, 58],
+    "tileX": 15.32281617919147,
+    "tileY": 10.08960184473923,
+    "width": 2,
+    "baseDepth": 18,
+    "scale": 2,
+    "linkedColliders": [
+      {
+        "x": 767.4951766011906,
+        "y": 566.300888547483,
+        "width": 56,
+        "height": 86
+      }
+    ],
+    "linkedPoints": [
+      {
+        "label": "sleep",
+        "x": 765.4951766011906,
+        "y": 502.30088854748305
+      }
+    ]
+  },
+  {
+    "id": "bedroom-top-right-wall-copy-1",
+    "name": "Bedroom top right wall copy 1",
+    "kind": "solid",
+    "x": 774.8609518737267,
+    "y": 361.0971414859922,
+    "width": 84,
+    "height": 24,
+    "color": 7165251
+  },
+  {
+    "id": "kitchen-right-chair-copy-5",
+    "name": "Kitchen right chair copy 5",
+    "kind": "tiles",
+    "texture": "tiles_kitchen",
+    "frames": [213, 229],
+    "tileX": 20.426666692495346,
+    "tileY": 4.1133334957559855,
+    "width": 1,
+    "baseDepth": 18,
+    "scale": 1,
+    "linkedColliders": [],
+    "linkedPoints": [
+      {
+        "label": "prompt:left",
+        "x": 1008.4800012397766,
+        "y": 215.44000779628732
+      },
+      {
+        "label": "sit:left",
+        "x": 1004.4800012397766,
+        "y": 219.44000779628732
+      }
+    ]
+  },
+  {
+    "id": "kitchen-left-chair-copy-2",
+    "name": "Kitchen left chair copy 2",
+    "kind": "tiles",
+    "texture": "tiles_kitchen",
+    "frames": [182, 198],
+    "tileX": 17.453333333333337,
+    "tileY": 4.093333333333334,
+    "width": 1,
+    "baseDepth": 18,
+    "scale": 1,
+    "linkedColliders": [],
+    "linkedPoints": [
+      {
+        "label": "prompt:right",
+        "x": 857.7600000000002,
+        "y": 214.48000000000002
+      },
+      {
+        "label": "sit:right",
+        "x": 861.7600000000002,
+        "y": 218.48000000000002
+      }
+    ]
+  },
+  {
+    "id": "art-easel-copy-1",
+    "name": "Art easel copy 1",
+    "kind": "tiles",
+    "texture": "tiles_hospital",
+    "frames": [1531, 1532, 1547, 1548],
+    "tileX": 19.153777777777773,
+    "tileY": 13.999666666666673,
+    "width": 2,
+    "baseDepth": 18,
+    "scale": 1,
+    "linkedColliders": [],
+    "linkedPoints": []
+  },
+  {
+    "id": "crayons-copy-2",
+    "name": "Crayons copy 2",
+    "kind": "tiles",
+    "texture": "tiles_hospital",
+    "frames": [1530, 1546],
+    "tileX": 18.359555555555566,
+    "tileY": 14.35044444444443,
+    "width": 1,
+    "baseDepth": 18,
+    "scale": 1,
+    "linkedColliders": [],
+    "linkedPoints": []
+  },
+  {
+    "id": "wh-long-counter-copy-1",
+    "name": "Wh Long Counter copy 1",
+    "kind": "tiles",
+    "texture": "tiles_bitglow_kitchen",
+    "frames": [
+      547, 548, 549, 550, 551, 552, 553, 554, 573, 574, 575, 576, 577, 578, 579,
+      580, 599, 600, 601, 602, 603, 604, 605, 606
+    ],
+    "tileX": 15.478095172210253,
+    "tileY": 0.512380868474909,
+    "width": 8,
+    "baseDepth": 18,
+    "scale": 2,
+    "linkedColliders": [
+      {
+        "x": 870.9485682660921,
+        "y": 86.59428168679563,
+        "width": 246,
+        "height": 54
+      }
+    ],
+    "linkedPoints": []
+  },
+  {
+    "id": "wh-single-counter-copy-2",
+    "name": "Wh Single Counter copy 2",
+    "kind": "tiles",
+    "texture": "tiles_bitglow_kitchen",
+    "frames": [555, 556, 581, 582, 607, 608],
+    "tileX": 21.87999999999999,
+    "tileY": 0.4866666666666671,
+    "width": 2,
+    "baseDepth": 18,
+    "scale": 2,
+    "linkedColliders": [
+      {
+        "x": 1082.2399999999993,
+        "y": 85.36000000000001,
+        "width": 56,
+        "height": 54
+      }
+    ],
+    "linkedPoints": []
+  },
+  {
+    "id": "oven-2-copy-3",
+    "name": "Oven 2 copy 3",
+    "kind": "tiles",
+    "texture": "tiles_bitglow_kitchen",
+    "frames": [558, 559, 584, 585, 610, 611],
+    "tileX": 20.525555555555574,
+    "tileY": 0.46111111111111075,
+    "width": 2,
+    "baseDepth": 18,
+    "scale": 2,
+    "linkedColliders": [
+      {
+        "x": 1017.2266666666676,
+        "y": 84.13333333333331,
+        "width": 56,
+        "height": 54
+      }
+    ],
+    "linkedPoints": []
+  },
+  {
+    "id": "single-bed-2-copy-4",
+    "name": "Single Bed 2 copy 4",
+    "kind": "tiles",
+    "texture": "tiles_bitglow_beds",
+    "frames": [15, 16, 29, 30, 43, 44, 57, 58],
+    "tileX": 19.3677777777778,
+    "tileY": 10.087777777777783,
+    "width": 2,
+    "baseDepth": 18,
+    "scale": 2,
+    "linkedColliders": [
+      {
+        "x": 961.6533333333343,
+        "y": 566.2133333333336,
+        "width": 56,
+        "height": 86
+      }
+    ],
+    "linkedPoints": [
+      {
+        "label": "sleep",
+        "x": 959.6533333333343,
+        "y": 502.2133333333336
+      }
+    ]
+  },
+  {
+    "id": "plant-1-copy-2",
+    "name": "Plant 1 copy 2",
+    "kind": "tiles",
+    "texture": "tiles_trislin_interior",
+    "frames": [127],
+    "tileX": 6.579820985448877,
+    "tileY": 18.01904924321449,
+    "width": 1,
+    "baseDepth": 18,
+    "scale": 2,
+    "linkedColliders": [
+      {
+        "x": 331.8314073015461,
+        "y": 882.9143636742955,
+        "width": 18,
+        "height": 20
+      }
+    ],
+    "linkedPoints": []
+  },
+  {
+    "id": "plant-2-copy-1",
+    "name": "Plant 2 copy 1",
+    "kind": "tiles",
+    "texture": "tiles_trislin_interior",
+    "frames": [143],
+    "tileX": 19.063369135416036,
+    "tileY": 4.2869220841230895,
+    "width": 1,
+    "baseDepth": 18,
+    "scale": 2,
+    "linkedColliders": [
+      {
+        "x": 931.0417184999696,
+        "y": 223.7722600379083,
+        "width": 18,
+        "height": 20
+      }
+    ],
+    "linkedPoints": []
+  },
+  {
+    "id": "plant-3-copy-1",
+    "name": "Plant 3 copy 1",
+    "kind": "tiles",
+    "texture": "tiles_hospital",
+    "frames": [304],
+    "tileX": 5.505135324459256,
+    "tileY": 18.40745611660306,
+    "width": 1,
+    "baseDepth": 18,
+    "scale": 1,
+    "linkedColliders": [
+      {
+        "x": 288.2464955740443,
+        "y": 913.557893596947,
+        "width": 20,
+        "height": 22
+      }
+    ],
+    "linkedPoints": []
+  },
+  {
+    "id": "double-bed-3-copy-1",
+    "name": "Double bed 3 copy 1",
+    "kind": "tiles",
+    "texture": "tiles_bitglow_beds",
+    "frames": [25, 26, 27, 39, 40, 41, 53, 54, 55, 67, 68, 69],
+    "tileX": 22.916666666666668,
+    "tileY": 11.916666666666659,
+    "width": 3,
+    "baseDepth": 18,
+    "scale": 2,
+    "linkedColliders": [
+      {
+        "x": 1148,
+        "y": 653.9999999999997,
+        "width": 88,
+        "height": 86
+      }
+    ],
+    "linkedPoints": [
+      {
+        "label": "sleep",
+        "x": 1160,
+        "y": 589.9999999999997
+      }
+    ]
+  },
+  {
+    "id": "plant-5-copy-1",
+    "name": "Plant 5 copy 1",
+    "kind": "tiles",
+    "texture": "tiles_hospital",
+    "frames": [307],
+    "tileX": 7.52392152550864,
+    "tileY": 17.931765317493273,
+    "width": 1,
+    "baseDepth": 18,
+    "scale": 1,
+    "linkedColliders": [
+      {
+        "x": 385.1482332244147,
+        "y": 890.7247352396771,
+        "width": 20,
+        "height": 22
+      }
+    ],
+    "linkedPoints": []
+  },
+  {
+    "id": "plant-9-copy-1",
+    "name": "Plant 9 copy 1",
+    "kind": "tiles",
+    "texture": "tiles_bitglow_decorations_lrk",
+    "frames": [63, 75],
+    "tileX": 21.78176475604096,
+    "tileY": 17.943398963265615,
+    "width": 1,
+    "baseDepth": 18,
+    "scale": 2,
+    "linkedColliders": [
+      {
+        "x": 1061.5247082899662,
+        "y": 879.2831502367495,
+        "width": 18,
+        "height": 20
+      }
+    ],
+    "linkedPoints": []
+  },
+  {
+    "id": "plant-7-copy-3",
+    "name": "Plant 7 copy 3",
+    "kind": "tiles",
+    "texture": "tiles_trislin_interior",
+    "frames": [110, 126],
+    "tileX": 0.7698688102584443,
+    "tileY": 17.73359527431322,
+    "width": 1,
+    "baseDepth": 18,
+    "scale": 2,
+    "linkedColliders": [
+      {
+        "x": 52.95370289240533,
+        "y": 869.2125731670346,
+        "width": 18,
+        "height": 20
+      }
+    ],
+    "linkedPoints": []
+  },
+  {
+    "id": "plant-8-copy-5",
+    "name": "Plant 8 copy 5",
+    "kind": "tiles",
+    "texture": "tiles_bitglow_decorations_lrk",
+    "frames": [61, 73],
+    "tileX": 2.4559847334152765,
+    "tileY": 6.3696145974127925,
+    "width": 1,
+    "baseDepth": 18,
+    "scale": 2,
+    "linkedColliders": [
+      {
+        "x": 133.88726720393328,
+        "y": 323.74150067581405,
+        "width": 18,
+        "height": 20
+      }
+    ],
+    "linkedPoints": []
+  },
+  {
+    "id": "nightstand-copy-7",
+    "name": "Nightstand copy 7",
+    "kind": "tiles",
+    "texture": "tiles_trislin_interior",
+    "frames": [57],
+    "tileX": 22.033872876432643,
+    "tileY": 12.791960962371432,
+    "width": 1,
+    "baseDepth": 18,
+    "scale": 2,
+    "linkedColliders": [
+      {
+        "x": 1073.625898068767,
+        "y": 632.0141261938287,
+        "width": 24,
+        "height": 20
+      }
+    ],
+    "linkedPoints": []
+  },
+  {
+    "id": "desk-2-copy-8",
+    "name": "Desk 2 copy 8",
+    "kind": "tiles",
+    "texture": "tiles_modern_office",
+    "frames": [547, 563, 579],
+    "tileX": 26.333333333333265,
+    "tileY": 16.220000000000045,
+    "width": 1,
+    "baseDepth": 18,
+    "scale": 1,
+    "linkedColliders": [],
+    "linkedPoints": []
+  },
+  {
+    "id": "desk-chair-left-copy-11",
+    "name": "Desk chair left copy 11",
+    "kind": "tiles",
+    "texture": "tiles_modern_office",
+    "frames": [552, 568],
+    "tileX": 25.572843374752146,
+    "tileY": 17.14725506593887,
+    "width": 1,
+    "baseDepth": 18,
+    "scale": 1,
+    "linkedColliders": [],
+    "linkedPoints": [
+      {
+        "label": "prompt:right",
+        "x": 1251.496481988103,
+        "y": 841.0682431650658
+      },
+      {
+        "label": "sit:right",
+        "x": 1257.496481988103,
+        "y": 837.0682431650658
+      }
+    ]
+  },
+  {
+    "id": "plant-6-copy-14",
+    "name": "Plant 6 copy 14",
+    "kind": "tiles",
+    "texture": "tiles_hospital",
+    "frames": [308],
+    "tileX": 2.024787853673757,
+    "tileY": 1.7786931117118843,
+    "width": 1,
+    "baseDepth": 18,
+    "scale": 1,
+    "linkedColliders": [
+      {
+        "x": 121.18981697634032,
+        "y": 115.37726936217044,
+        "width": 20,
+        "height": 22
+      }
+    ],
+    "linkedPoints": []
+  },
+  {
+    "id": "single-monitor-r1-copy-3",
+    "name": "Single Monitor R1 copy 3",
+    "kind": "tiles",
+    "texture": "tiles_modern_office",
+    "frames": [572],
+    "tileX": 26.3333333333333,
+    "tileY": 16.25000000000001,
+    "width": 1,
+    "baseDepth": 18,
+    "scale": 1,
+    "linkedColliders": [],
+    "linkedPoints": []
+  },
+  {
+    "id": "keyboard-r-copy-5",
+    "name": "Keyboard R copy 5",
+    "kind": "tiles",
+    "texture": "tiles_modern_office",
+    "frames": [585],
+    "tileX": 26.416666666666604,
+    "tileY": 17.333333333333314,
+    "width": 1,
+    "baseDepth": 18,
+    "scale": 1,
+    "linkedColliders": [],
+    "linkedPoints": []
+  },
+  {
+    "id": "books-copy-6",
+    "name": "Books copy 6",
+    "kind": "tiles",
+    "texture": "tiles_trislin_interior",
+    "frames": [167],
+    "tileX": 26.749999999999947,
+    "tileY": 17.416666666666675,
+    "width": 1,
+    "baseDepth": 18,
+    "scale": 2,
+    "linkedColliders": [],
+    "linkedPoints": []
+  },
+  {
+    "id": "dining-table-2-copy-8",
+    "name": "Dining Table 2 copy 8",
+    "kind": "tiles",
+    "texture": "tiles_trislin_interior",
+    "frames": [140, 141, 142, 156, 157, 158, 172, 173, 174],
+    "tileX": 6.484444444444441,
+    "tileY": 17.32999999999998,
+    "width": 3,
+    "baseDepth": 18,
+    "scale": 2,
+    "linkedColliders": [
+      {
+        "x": 359.25333333333316,
+        "y": 879.839999999999,
+        "width": 80,
+        "height": 52
+      }
+    ],
+    "linkedPoints": []
+  }
+]
